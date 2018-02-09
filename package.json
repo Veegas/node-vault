@@ -1,5 +1,5 @@
 {
-  "name": "node-vault",
+  "name": "node-vault-axios",
   "version": "0.8.0",
   "description": "Javascript client for HashiCorp's Vault",
   "main": "./src/index.js",
@@ -24,10 +24,9 @@
     "src"
   ],
   "dependencies": {
+    "axios": "^0.17.1",
     "debug": "3.1.0",
     "mustache": "^2.2.1",
-    "request": "^2.83.0",
-    "request-promise-native": "^1.0.5",
     "tv4": "^1.2.7"
   },
   "devDependencies": {
@@ -48,14 +47,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/kr1sp1n/node-vault.git"
+    "url": "git://github.com/veegas/node-vault.git"
   },
   "keywords": [
     "vault",
     "hashicorp",
     "secrets",
     "manage",
-    "client"
+    "client",
+    "axios"
   ],
   "author": "kr1sp1n <krispin@posteo.de> (https://github.com/kr1sp1n)",
   "contributors": [
@@ -63,11 +63,12 @@
     "Trevor Robinson (https://github.com/trevorr)",
     "Tim Robinson (https://github.com/timjrobinson)",
     "Adam Kelsall (https://github.com/adamkelsall)",
-    "Charles Phillips (https://github.com/doublerebel)"
+    "Charles Phillips (https://github.com/doublerebel)",
+    "Mohamed Yasser (https://github.com/veegas)"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kr1sp1n/node-vault/issues"
+    "url": "https://github.com/veegas/node-vault/issues"
   },
-  "homepage": "https://github.com/kr1sp1n/node-vault"
+  "homepage": "https://github.com/veegas/node-vault"
 }

@@ -1,4 +1,7 @@
-# node-vault
+# node-vault-axios
+
+This repo is a fork from kr1sp1n/node-vault only uses axios instead of request-promise for http requests
+
 
 [![Build Status](https://img.shields.io/travis/kr1sp1n/node-vault/master.svg?style=flat-square)](https://travis-ci.org/kr1sp1n/node-vault)
 [![Coverage Status](https://img.shields.io/codecov/c/github/kr1sp1n/node-vault/master.svg?style=flat-square)](https://codecov.io/gh/kr1sp1n/node-vault/branch/master)

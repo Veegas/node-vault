@@ -4,7 +4,7 @@ let debug = require('debug')('node-vault');
 let tv4 = require('tv4');
 let commands = require('./commands.js');
 let mustache = require('mustache');
-let rp = require('request-promise-native');
+const axios = require('axios');
 
 module.exports = (config = {}) => {
   // load conditional dependencies
@@ -12,32 +12,28 @@ module.exports = (config = {}) => {
   tv4 = config.tv4 || tv4;
   commands = config.commands || commands;
   mustache = config.mustache || mustache;
-  rp = (config['request-promise'] || rp).defaults({
-    json: true,
-    resolveWithFullResponse: true,
-    simple: false,
-    strictSSL: !process.env.VAULT_SKIP_VERIFY,
-  });
+
   const client = {};
 
   function handleVaultResponse(response) {
     if (!response) return Promise.reject(new Error('No response passed'));
-    debug(response.statusCode);
-    if (response.statusCode !== 200 && response.statusCode !== 204) {
+    debug(response.status);
+    if (response.status !== 200 && response.status !== 204) {
       // handle health response not as error
       if (response.request.path.match(/sys\/health/) !== null) {
-        return Promise.resolve(response.body);
+        return Promise.resolve(response.data);
       }
       let message;
-      if (response.body && response.body.errors && response.body.errors.length > 0) {
-        message = response.body.errors[0];
+      if (response.data && response.data.errors && response.data.errors.length > 0) {
+        message = response.data.errors[0];
       } else {
-        message = `Status ${response.statusCode}`;
+        message = `Status ${response.status}`;
       }
       const error = new Error(message);
       return Promise.reject(error);
     }
-    return Promise.resolve(response.body);
+    // console.log("Response: ", response.data);
+    return Promise.resolve(response.data);
   }
 
   client.handleVaultResponse = handleVaultResponse;
@@ -74,9 +70,11 @@ module.exports = (config = {}) => {
       options.headers['X-Vault-Token'] = client.token;
     }
     options.uri = uri;
+    options.url = uri;
+
     debug(options.method, uri);
     // debug(options.json);
-    return rp(options).then(handleVaultResponse);
+    return axios(options).then(handleVaultResponse);
   };
 
   client.help = (path, requestOptions) => {
@@ -158,9 +156,9 @@ module.exports = (config = {}) => {
       if (!conf.schema) return client.request(options);
       // else do validation of request URL and body
       return validate(options.json, conf.schema.req)
-      .then(() => validate(options.json, conf.schema.query))
-      .then(() => extendOptions(conf, options))
-      .then((extendedOptions) => client.request(extendedOptions));
+        .then(() => validate(options.json, conf.schema.query))
+        .then(() => extendOptions(conf, options))
+        .then((extendedOptions) => client.request(extendedOptions));
     };
   }
 
